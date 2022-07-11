@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
+using SoundType;
 public class Sound : MonoBehaviour
 {
     //기본적으로 조정할 오디오믹서. 그룹으로 eff와 bgm을 나누어 놔야 함
@@ -23,11 +24,35 @@ public class Sound : MonoBehaviour
     string master_Group = "MASTER";
 
     [SerializeField]
-    private List<AudioClip> audioClips = new List<AudioClip>();
+    private List<AudioClip> effAudioClips = new List<AudioClip>();
+    [SerializeField]
+    private List<AudioClip> bgmAudioClips = new List<AudioClip>();
+    [SerializeField]
+    private AudioMixerGroup bgmMixerGroup;
+    [SerializeField]
+    private AudioMixerGroup effMixerGroup;
 
+    private List<AudioSource> SoundsEff = new List<AudioSource>();
+    private List<AudioSource> SoundsBgm = new List<AudioSource>();
+
+    private Dictionary<SoundType.SoundType.BgmType, AudioSource> BgmDictionary = new Dictionary<SoundType.SoundType.BgmType, AudioSource>;
+    private Dictionary<SoundType.SoundType.EffType, AudioSource> EffDictionary = new Dictionary<SoundType.SoundType.EffType, AudioSource>;
+
+    private AudioSource lastPlayBgm;
     private void Awake()
     {
         SetSource();
+        SetAddListener();
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+            PlayEff(0);
+        if (Input.GetKeyDown(KeyCode.R))
+            PlayBgm(0);
+    }
+    private void SetAddListener()
+    {
         bgmSlider.onValueChanged.AddListener(SetBgmVolume);
         effSlider.onValueChanged.AddListener(SetEffVolume);
         masterSlider.onValueChanged.AddListener(SetMasterVolume);
@@ -63,14 +88,42 @@ public class Sound : MonoBehaviour
     }
     private void SetSource()
     {
-        int i = 0;
-        foreach (AudioClip clip in audioClips)
+        int i = 1;
+        foreach (AudioClip clip in effAudioClips)
         {
             var obj = new GameObject().AddComponent<AudioSource>();
-            obj.name = "Sound "+ i++;
-            obj.clip = clip;
-            obj.outputAudioMixerGroup = audioMixer.outputAudioMixerGroup;
+            obj.name = "Eff " + i;
+            obj.playOnAwake = false;
+            obj.outputAudioMixerGroup = effMixerGroup;
+            SoundsEff.Add(obj);
+
             obj.transform.SetParent(this.transform);
         }
+        i = 1;
+        foreach (AudioClip clip in bgmAudioClips)
+        {
+            var obj = new GameObject().AddComponent<AudioSource>();
+            obj.name = "Bgm " + i;
+            obj.playOnAwake = false;
+            obj.clip = clip;
+            obj.loop = true;
+            obj.outputAudioMixerGroup = bgmMixerGroup;
+            SoundsBgm.Add(obj);
+
+            obj.transform.SetParent(this.transform);
+        }
+
+    }
+    public void PlayBgm(int value)
+    {
+        Debug.Log("play Bgm");
+        lastPlayBgm?.Stop();
+        SoundsBgm[value].Play();
+        lastPlayBgm = SoundsBgm[value];
+    }
+    public void PlayEff(int value)
+    {
+        Debug.Log("play eff");
+        SoundsEff[value].Play();
     }
 }
