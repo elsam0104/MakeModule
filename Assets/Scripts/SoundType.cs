@@ -11,7 +11,5 @@ namespace SoundType
         Example = 0,
 
     }
-    public class SoundType
-    {
-    }
+    public class SoundType {}
 }

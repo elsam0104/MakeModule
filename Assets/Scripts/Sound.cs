@@ -10,15 +10,15 @@ public class Sound : MonoBehaviour
     //또한 각각 그룹의 인스펙터에서 volume 우클릭 -> expose
     //exposed parameters 에서 각각 파라미터 이름을 바꿔줄 것.
     [SerializeField]
-    AudioMixer audioMixer = null;
+    private AudioMixer audioMixer = null;
     //볼륨 조절할 슬라이더.
     [Header("볼륨 조절할 슬라이더")]
     [SerializeField]
-    Slider bgmSlider = null;
+    private Slider bgmSlider = null;
     [SerializeField]
-    Slider effSlider = null;
+    private Slider effSlider = null;
     [SerializeField]
-    Slider masterSlider = null;
+    private Slider masterSlider = null;
     [Header("실행시킬 클립")]
     [SerializeField]
     private List<AudioClip> effAudioClips = new List<AudioClip>();
@@ -34,9 +34,9 @@ public class Sound : MonoBehaviour
     private List<AudioSource> SoundsBgm = new List<AudioSource>();
 
     //exposed parameters의 파라미터들의 이름.
-    string bgm_Group = "BGM";
-    string eff_Group = "EFF";
-    string master_Group = "MASTER";
+    private string bgm_Group = "BGM";
+    private string eff_Group = "EFF";
+    private string master_Group = "MASTER";
 
     private AudioSource lastPlayBgm;
     private void Awake()
@@ -51,6 +51,18 @@ public class Sound : MonoBehaviour
             PlayEff(SoundType.EffType.Example);
         if (Input.GetKeyDown(KeyCode.R))
             PlayBgm(SoundType.BgmType.Example);
+    }
+    public void PlayBgm(SoundType.BgmType value)
+    {
+        Debug.Log("play Bgm");
+        lastPlayBgm?.Stop();
+        SoundsBgm[(int)value].Play();
+        lastPlayBgm = SoundsBgm[(int)value];
+    }
+    public void PlayEff(SoundType.EffType value)
+    {
+        Debug.Log("play eff");
+        SoundsEff[(int)value].Play();
     }
     private void SetAddListener()
     {
@@ -116,17 +128,5 @@ public class Sound : MonoBehaviour
             i++;
         }
 
-    }
-    public void PlayBgm(SoundType.BgmType value)
-    {
-        Debug.Log("play Bgm");
-        lastPlayBgm?.Stop();
-        SoundsBgm[(int)value].Play();
-        lastPlayBgm = SoundsBgm[(int)value];
-    }
-    public void PlayEff(SoundType.EffType value)
-    {
-        Debug.Log("play eff");
-        SoundsEff[(int)value].Play();
     }
 }
