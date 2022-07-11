@@ -1614,9 +1614,10 @@ MonoBehaviour:
   bgmSlider: {fileID: 1488753492}
   effSlider: {fileID: 185290734}
   masterSlider: {fileID: 1583172262}
-  audioClips:
-  - {fileID: 8300000, guid: 3756e12be77112d44936784c8b4d4ca5, type: 3}
+  effAudioClips:
   - {fileID: 8300000, guid: 9a9b1e398da7fa84586fbfbc86ede098, type: 3}
+  bgmAudioClips:
+  - {fileID: 8300000, guid: 3756e12be77112d44936784c8b4d4ca5, type: 3}
   bgmMixerGroup: {fileID: 6282871087167882481, guid: f19dd06e6b44c764aaa395df4b338d23, type: 2}
   effMixerGroup: {fileID: -870748227170218147, guid: f19dd06e6b44c764aaa395df4b338d23, type: 2}
 --- !u!4 &1872552534

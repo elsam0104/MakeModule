@@ -12,21 +12,19 @@ public class Sound : MonoBehaviour
     [SerializeField]
     AudioMixer audioMixer = null;
     //볼륨 조절할 슬라이더.
+    [Header("볼륨 조절할 슬라이더")]
     [SerializeField]
     Slider bgmSlider = null;
     [SerializeField]
     Slider effSlider = null;
     [SerializeField]
     Slider masterSlider = null;
-    //exposed parameters의 파라미터들의 이름.
-    string bgm_Group = "BGM";
-    string eff_Group = "EFF";
-    string master_Group = "MASTER";
-
+    [Header("실행시킬 클립")]
     [SerializeField]
     private List<AudioClip> effAudioClips = new List<AudioClip>();
     [SerializeField]
     private List<AudioClip> bgmAudioClips = new List<AudioClip>();
+    [Header("오디오 믹서 그룹")]
     [SerializeField]
     private AudioMixerGroup bgmMixerGroup;
     [SerializeField]
@@ -35,8 +33,10 @@ public class Sound : MonoBehaviour
     private List<AudioSource> SoundsEff = new List<AudioSource>();
     private List<AudioSource> SoundsBgm = new List<AudioSource>();
 
-    private Dictionary<SoundType.SoundType.BgmType, AudioSource> BgmDictionary = new Dictionary<SoundType.SoundType.BgmType, AudioSource>;
-    private Dictionary<SoundType.SoundType.EffType, AudioSource> EffDictionary = new Dictionary<SoundType.SoundType.EffType, AudioSource>;
+    //exposed parameters의 파라미터들의 이름.
+    string bgm_Group = "BGM";
+    string eff_Group = "EFF";
+    string master_Group = "MASTER";
 
     private AudioSource lastPlayBgm;
     private void Awake()
@@ -46,10 +46,11 @@ public class Sound : MonoBehaviour
     }
     private void Update()
     {
+        //사용 예시
         if (Input.GetKeyDown(KeyCode.E))
-            PlayEff(0);
+            PlayEff(SoundType.EffType.Example);
         if (Input.GetKeyDown(KeyCode.R))
-            PlayBgm(0);
+            PlayBgm(SoundType.BgmType.Example);
     }
     private void SetAddListener()
     {
@@ -95,9 +96,10 @@ public class Sound : MonoBehaviour
             obj.name = "Eff " + i;
             obj.playOnAwake = false;
             obj.outputAudioMixerGroup = effMixerGroup;
+            obj.clip = clip;
             SoundsEff.Add(obj);
-
             obj.transform.SetParent(this.transform);
+            i++;
         }
         i = 1;
         foreach (AudioClip clip in bgmAudioClips)
@@ -108,22 +110,23 @@ public class Sound : MonoBehaviour
             obj.clip = clip;
             obj.loop = true;
             obj.outputAudioMixerGroup = bgmMixerGroup;
-            SoundsBgm.Add(obj);
 
+            SoundsBgm.Add(obj);
             obj.transform.SetParent(this.transform);
+            i++;
         }
 
     }
-    public void PlayBgm(int value)
+    public void PlayBgm(SoundType.BgmType value)
     {
         Debug.Log("play Bgm");
         lastPlayBgm?.Stop();
-        SoundsBgm[value].Play();
-        lastPlayBgm = SoundsBgm[value];
+        SoundsBgm[(int)value].Play();
+        lastPlayBgm = SoundsBgm[(int)value];
     }
-    public void PlayEff(int value)
+    public void PlayEff(SoundType.EffType value)
     {
         Debug.Log("play eff");
-        SoundsEff[value].Play();
+        SoundsEff[(int)value].Play();
     }
 }
