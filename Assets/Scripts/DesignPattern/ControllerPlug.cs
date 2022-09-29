@@ -17,135 +17,26 @@ public class ControllerPlug : MonoBehaviour
     private int plugsLocked;
 
     //캐싱 위한 변수
-    public Transform playerCamera;
-    private Animator playerAnimator;
-    private Rigidbody playerRigidbody;
-    private Transform playerTransform;
 
-    //horizontal, vertical axis
-    private float h;
-    private float v;
-
-    //카메라를 향하도록 움직일 때 회전되는 속도
-    public float lerpTurn = 0.05f;
-    //달리기 기능이 카메라FOV에 기록되었나?
-    private bool flagChangerFOV;
-    //달리기 시야각
-    public float runFOV = 100;
-    //마지막으로 향했던 방향
-    private Vector3 dirLast;
-    //달리기 중인가?
-    private bool flagRun;
-    //애니메잇션 h,v축 값
-    private int hFloat;
-    private int vFloat;
-    //땅 위에 붙어 있는가?
-    private int flagOnGround;
-    //땅과 충돌체크를 위한 충돌체 영역
-    private Vector3 colliderGround;
-
-    public float GetHorizontal { get => h; }
-    public float GetVertial { get => v; }
-    public Rigidbody GetRigidbody { get => playerRigidbody; }
-    public Animator GetAnimator { get => playerAnimator; }
 
     //지금 어떤 기본 플러그가 꽃혀 있는가
     public int getDefaultPlugs { get => defaultPlugs; }
 
     private void Awake()
     {
-        playerTransform = transform;
-        plugs = new List<BasePlugAble>();
-        overridePlugs = new List<BasePlugAble>();
-        playerAnimator = GetComponent<Animator>();
-        playerRigidbody = GetComponent<Rigidbody>();
-        colliderGround = GetComponent<Collider>().bounds.extents; //범위 안에 들어왔는지
-
-        //애니메이션에 달려있는거라 임시
-        hFloat = Animator.StringToHash("H");
-        vFloat = Animator.StringToHash("V");
-        flagOnGround = Animator.StringToHash("Grounded");
+        //캐싱
     }
 
-    //플레이어가 이동중인가?
-    //우리가 이동하는 중에 플러그인을 붙이기 위함
-    public bool getFlagMoving()
-    {
-        //앱실로는 극한값. 0의 근사치로써 실수를 0보다 큰지 확인할 때 쓰인다. 
-        //return (h!=0)||(v!=0);
-        return Mathf.Abs(h) > Mathf.Epsilon || Mathf.Abs(v) > Mathf.Epsilon;
-    }
-
-    public bool getFlagHorizontalMoving()
-    {
-        return Mathf.Abs(h) > Mathf.Epsilon;
-    }
-
-    public bool getFlagRun()
-    {
-        foreach (BasePlugAble basePlugAble in plugs)
-        {
-            if (basePlugAble.flagAllowRun)
-                return false;
-        }
-        foreach (BasePlugAble overPlugAble in overridePlugs)
-        {
-            if (overPlugAble.flagAllowRun)
-                return false;
-        }
-        return true;
-    }
-
-    //달리는게 가능한가?
-    public bool getFlagReadyRunning()
-    {
-        return flagRun && getFlagMoving() && getFlagRun();
-    }
-    //혹시 땅 위에 있는가? (버그로 점프 안 했는데 못들어가는곳 들어가 낑기는거 판별에 사용)
-    public bool getFlagGrounded()
-    {
-        Ray ray = new Ray(playerTransform.position + Vector3.up * 2 * colliderGround.x, Vector3.down);
-        return Physics.SphereCast(ray, colliderGround.x, colliderGround.x + 0.2f);
-    }
     //키 조작 키 전환 상태 체크
     private void Update()
     {
-        h = Input.GetAxis("Horizontal");
-        v = Input.GetAxis("Vertical");
-        playerAnimator.SetFloat(hFloat, h, 0.1f, Time.deltaTime);
-        playerAnimator.SetFloat(vFloat, v, 0.1f, Time.deltaTime);
-        //나중에
-        flagRun = Input.GetButtonDown("Jump");
-
-        //if (getFlagReadyRunning())
-        //{
-        //    flagChangerFOV = true;
-        //    cameraScript.setFOV(runFOV);
-        //}
-        //else if (flagChangerFOV)
-        //{
-        //    cameraScript.restFOV();
-        //    flagChangerFOV = false;
-        //}
-
-    }
-    public void restPosition()
-    {
-        if (dirLast != Vector3.zero)
-        {
-            //y값을 0으로 지정 후 y계산하여 넣어주기 위함
-            dirLast.y = 0f;
-            Quaternion targetRotation = Quaternion.LookRotation(dirLast);
-            Quaternion newRotation = Quaternion.Slerp(playerRigidbody.rotation, targetRotation, lerpTurn);
-            playerRigidbody.MoveRotation(newRotation);
-        }
     }
     //플러거블 조정
     private void FixedUpdate()
     {
         bool flagAnyPlugActive = false;
 
-        if (plugsLocked > 0 || overridePlugs.Count == 0)
+        if (plugsLocked > 0 || overridePlugs.Count == 0)  //잠긴 플러그가 있거나 오버라이딩 된 플러그가 없으면
         {
             foreach (BasePlugAble basePlugAble in plugs)
             {
@@ -162,11 +53,6 @@ public class ControllerPlug : MonoBehaviour
             {
                 basePlugAble.childFixedUpdate();
             }
-        }
-        if (!flagAnyPlugActive && overridePlugs.Count == 0)
-        {
-            playerRigidbody.useGravity = true;
-            restPosition();
         }
     }
 
@@ -282,14 +168,6 @@ public class ControllerPlug : MonoBehaviour
         {
             plugsLocked = 0;
         }
-    }
-    public Vector3 getDirLast()
-    {
-        return dirLast;
-    }
-    public void setDirLast(Vector3 dir)
-    {
-        dirLast = dir;
     }
 }
 
