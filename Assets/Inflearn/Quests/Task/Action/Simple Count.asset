@@ -9,10 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f384d7ecd9f869644aa7933ef266d618, type: 3}
-  m_Name: Task_Text
+  m_Script: {fileID: 11500000, guid: 39d0385c88bea76409bf2b0e1aac1733, type: 3}
+  m_Name: Simple Count
   m_EditorClassIdentifier: 
-  codeName: 
-  description: 
-  action: {fileID: 11400000, guid: 96e53364bd388d24d8e49aefcb1a8aab, type: 2}
-  needToSuccess: 0

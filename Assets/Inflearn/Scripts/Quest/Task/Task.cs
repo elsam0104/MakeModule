@@ -9,7 +9,26 @@ public class Task : ScriptableObject
     private string codeName ="";
     [SerializeField]
     private string description = "";
+
+    [Header("Action")]
+    [SerializeField]
+    private TaskAction action;
+
     [Header("Setting")]
     [SerializeField]
-    private int needToComplete = 0;
+    private InitialSuccessValue initialSuccessValue;
+    [SerializeField]
+    private int needToSuccess = 0;
+
+
+    public int currentSuccess { get; private set; }
+    public string CodeName => codeName;
+    public string Description => description;
+    public int NeedToSuccess => needToSuccess;
+
+    public void ReceiveReport(int successCnt)
+    {
+        currentSuccess = action.Run(this,currentSuccess,successCnt);
+    }
+
 }
