@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a5737fdebb5b004eb7996a49d84a220, type: 3}
   m_Name: Quest_Test
   m_EditorClassIdentifier: 
-  category: {fileID: 11400000, guid: c65a374e39050364bb80be8a55a547ee, type: 2}
+  category: {fileID: 0}
   icon: {fileID: 0}
   codeName: 
   displayName: 
@@ -20,4 +20,8 @@ MonoBehaviour:
   taskGroups:
   - tasks:
     - {fileID: 11400000, guid: 125ad1173025519429a3cc1c2c709372, type: 2}
+  rewards: []
+  runConditions: []
+  cancelConditions: []
   useAutoComplete: 0
+  isCancelable: 0

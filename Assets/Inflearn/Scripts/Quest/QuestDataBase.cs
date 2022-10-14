@@ -1,18 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
-public class QuestDataBase : MonoBehaviour
+[CreateAssetMenu(menuName ="Quest/QuestDataBase")]
+public class QuestDataBase : ScriptableObject 
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField]
+    private List<Quest> quests;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public IReadOnlyList<Quest> Quests => quests;
+    public Quest FindQuestBy(string codeName) => quests.FirstOrDefault(x => x.CodeName == codeName);
 }
