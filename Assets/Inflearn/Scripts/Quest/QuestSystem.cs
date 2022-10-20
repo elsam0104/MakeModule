@@ -34,4 +34,9 @@ public class QuestSystem : MonoSingleton<QuestSystem>
         questDataBase = Resources.Load<QuestDataBase>("QuestDataBase");
         achivementDataBase = Resources.Load<QuestDataBase>("AchivementDataBase");
     }
+
+    public void Register(Quest quest)
+    {
+        var newQuest = Instantiate(quest);
+    }
 }
