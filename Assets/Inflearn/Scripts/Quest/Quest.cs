@@ -142,6 +142,13 @@ public class Quest : ScriptableObject
         onTaskSuccessChanged = null;
         onNewTaskGroup = null;
     }
+
+    public Quest Clone()
+    {
+        var clone = Instantiate(this);
+        clone.taskGroups = taskGroups.Select(x => new TaskGroup(x)).ToArray();
+        return clone;
+    }
     public virtual void Cancel()
     {
         CheckWarning();

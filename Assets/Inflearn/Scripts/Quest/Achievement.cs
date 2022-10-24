@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Quest/Achivement", fileName = "Achivement_")]
-public class Achivement : Quest
+public class Achievement : Quest
 {
     public override bool IsCancelable => false;
     public override void Cancel()

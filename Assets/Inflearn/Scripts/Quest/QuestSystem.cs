@@ -14,29 +14,58 @@ public class QuestSystem : MonoSingleton<QuestSystem>
     private List<Quest> activeQuests = new List<Quest>();
     private List<Quest> completeQuests = new List<Quest>();
 
-    private List<Achivement> activeAchivements = new List<Achivement>();
-    private List<Achivement> completeAchivements = new List<Achivement>();
+    private List<Achievement> activeAchievements = new List<Achievement>();
+    private List<Achievement> completeAchievements = new List<Achievement>();
 
-    private QuestDataBase questDataBase, achivementDataBase;
+    private QuestDataBase questDataBase, achievementDataBase;
 
     public event QuestRegisteredHandler onQuestRegistered;
     public event QuestCompletedHandler onQuestCompleted;
     public event QuestCanceledHandler onQuestCanceled;
 
+    public event QuestRegisteredHandler onachievementRegistered;
+    public event QuestCompletedHandler onachievementCompleted;
+
     public IReadOnlyList<Quest> ActiveQuests => activeQuests;
     public IReadOnlyList<Quest> CompleteQuests => completeQuests;
 
-    public IReadOnlyList<Achivement> ActiveAchivements => activeAchivements;
-    public IReadOnlyList<Achivement> CompleteAchivements => completeAchivements;
+    public IReadOnlyList<Achievement> Activeachievements => activeAchievements;
+    public IReadOnlyList<Achievement> Completeachievements => completeAchievements;
 
     private void Awake()
     {
         questDataBase = Resources.Load<QuestDataBase>("QuestDataBase");
-        achivementDataBase = Resources.Load<QuestDataBase>("AchivementDataBase");
+        achievementDataBase = Resources.Load<QuestDataBase>("achievementDataBase");
     }
 
     public void Register(Quest quest)
     {
-        var newQuest = Instantiate(quest);
+        var newQuest = quest.Clone();
     }
+
+    #region Callback
+    private void OnQuestCompleted(Quest quest)
+    {
+        activeQuests.Remove(quest);
+        completeQuests.Add(quest);
+
+        onQuestCompleted?.Invoke(quest);
+    }
+
+    private void OnQuestCanceled(Quest quest)
+    {
+        activeQuests.Remove(quest);
+        onQuestCanceled?.Invoke(quest);
+
+        Destroy(quest, Time.deltaTime);
+    }
+
+    private void OnAchievementCompleted(Quest achievement)
+    {
+        activeAchievements.Remove(achievement as Achievement);
+        completeAchievements.Add(achievement as Achievement);
+
+        onachievementCompleted?.Invoke(achievement);
+    }
+    #endregion
 }
