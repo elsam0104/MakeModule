@@ -24,7 +24,7 @@ public class QuestDataBase : ScriptableObject
     [ContextMenu("Find Achivements")]
     private void FindAchivements()
     {
-        FindQuestsBy<Achivement>();
+        //FindQuestsBy<Achivement>();
     }
     public void FindQuestsBy<T>() where T : Quest
     {
