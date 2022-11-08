@@ -41,6 +41,16 @@ public class QuestSystem : MonoSingleton<QuestSystem>
     public void Register(Quest quest)
     {
         var newQuest = quest.Clone();
+
+        if(newQuest is Achievement)
+        {
+            newQuest.onCompleted += OnAchievementCompleted;
+
+            activeAchievements.Add((Achievement)newQuest);
+
+            newQuest.OnRegister();
+            onachievementRegistered.Invoke(newQuest);
+        }
     }
 
     #region Callback
