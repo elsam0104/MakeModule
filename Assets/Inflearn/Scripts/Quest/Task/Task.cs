@@ -71,7 +71,7 @@ public class Task : ScriptableObject
 
     public TaskState State
     {
-        get => State;
+        get => state;
         set
         {
             var prevState = state;
@@ -81,11 +81,11 @@ public class Task : ScriptableObject
     }
 
     public bool IsComplete => State == TaskState.Complele;
-    public Quest owner { get; private set; }
+    public Quest Owener { get; private set; }
 
     public void SetUp(Quest owener)
     {
-        owner = owner;
+        Owener = owener;
     }
     public void Start()
     {

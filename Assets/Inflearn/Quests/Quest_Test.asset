@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   category: {fileID: 11400000, guid: c65a374e39050364bb80be8a55a547ee, type: 2}
   icon: {fileID: 0}
-  codeName: 
-  displayName: 
-  description: 
+  codeName: TEST
+  displayName: test
+  description: test quest
   taskGroups:
   - tasks:
     - {fileID: 11400000, guid: 125ad1173025519429a3cc1c2c709372, type: 2}
   rewards: []
   runConditions: []
   cancelConditions: []
-  useAutoComplete: 0
+  useAutoComplete: 1
   isCancelable: 0

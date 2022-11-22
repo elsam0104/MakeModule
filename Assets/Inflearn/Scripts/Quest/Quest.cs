@@ -103,6 +103,8 @@ public class Quest : ScriptableObject
 
         if (IsComplete)
             return;
+        CurrentTaskGroup.ReceiveReport(category, target, successCount);
+
         if (CurrentTaskGroup.IsAllQuestComplete)
         {
             if (currentTaskGroupIndex + 1 == taskGroups.Length) //현재 끝난 task group이 마지막이라면
